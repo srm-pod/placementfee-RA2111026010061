@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scribe Request</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Style for the button when disabled */
+        #pay-button {
+            background-color: grey;
+            cursor: not-allowed;
+        }
+        
+        /* Style for the button when enabled */
+        #pay-button.enabled {
+            background-color: green;
+            cursor: pointer;
+        }
+        
+        /* Style to disable pointer events for the anchor tag */
+        #pay-button a.disabled-link {
+            pointer-events: none;
+            color: inherit; /* Inherit color to avoid visual difference */
+        }
+        
+        /* Blinking text style */
+        .blinking {
+            color: red;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        /* Enable horizontal scrolling on small screens */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <img src="logo.webp" alt="SRM Logo" class="logo">
+            <div class="header-title">
+                <h1>SRM</h1>
+                <p>Student Placement Portal</p>
+            </div>
+        </div>
+        <div class="header-right">
+            <h2>Faculty of Engineering and Technology, Kattankulathur</h2>
+        </div>
+    </header>
+
+    <div class="register-number">
+        <p style="padding-left: 16px;" class="blinking">Register Number: RA2111026010061</p>
+    </div>
+
+    <main>
+        <section class="instructions">
+            <h2>Instructions:</h2>
+            <p>1. Scribe requests once submitted cannot be withdrawn/edited at any cost.</p>
+            <p>2. The student is advised to make sure of the requirement of a scribe before submitting the online application form and provide all the necessary, valid documents & information asked for smooth processing of the request.</p>
+        </section>
+
+        <section class="request-form">
+            <label for="exam-month">Exam Month / Year</label>
+            <select id="exam-month">
+                <option value="Jul-2024">Jul-2024</option>
+                <!-- Add more options as needed -->
+            </select>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Accept</th>
+                            <th>Year</th>
+                            <th>Fee Type</th>
+                            <th>Penalty Start Date</th>
+                            <th>Penalty Amount</th>
+                            <th>Scribe Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="checkbox" class="scribe-checkbox" data-amount="52000.00"></td>
+                            <td>2024</td>
+                            <td>Pod.ai Placement</td>
+                            <td>05-07-2024</td>
+                            <td>2000</td>
+                            <td>52000.00</td>
+                        </tr>
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="total-amount">
+                <p>Total Scribe Amount: <span id="total-amount">0.00</span></p>
+            </div>
+
+            <button id="pay-button" type="submit" disabled>
+                <a href="https://rzp.io/l/RA2111026010061" class="disabled-link" style="text-decoration: none;">Pay</a>
+            </button>
+        </section>
+    </main>
+
+    <script>
+        // Function to update the total scribe amount and button state
+        function updateTotalAmount() {
+            const checkboxes = document.querySelectorAll('.scribe-checkbox');
+            let totalAmount = 0;
+            let anyChecked = false;
+
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    totalAmount += parseFloat(checkbox.getAttribute('data-amount'));
+                    anyChecked = true;
+                }
+            });
+
+            document.getElementById('total-amount').innerText = totalAmount.toFixed(2);
+            
+            const payButton = document.getElementById('pay-button');
+            const payLink = payButton.querySelector('a');
+
+            if (anyChecked) {
+                payButton.classList.add('enabled');
+                payButton.disabled = false;
+                payLink.classList.remove('disabled-link');
+            } else {
+                payButton.classList.remove('enabled');
+                payButton.disabled = true;
+                payLink.classList.add('disabled-link');
+            }
+        }
+
+        // Add event listeners to checkboxes
+        document.querySelectorAll('.scribe-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', updateTotalAmount);
+        });
+
+        // Initial call to set the correct state of the pay button
+        updateTotalAmount();
+    </script>
+</body>
+</html>
